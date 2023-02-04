@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 
 use std::collections::hash_map::DefaultHasher;
-use std::hash::{Hash, Hasher};
+use std::hash::Hasher;
 
 const INITIAL_CAP: usize = 16;
 const MAX_LOAD_THRESHOLD: f32 = 0.75;
@@ -42,7 +42,7 @@ impl<K: std::hash::Hash + std::cmp::PartialEq, V> HashMap<K, V> {
     }
 
     fn find_mut(&mut self, key: &K) -> Option<&mut KeyVal<K, V>> {
-        let index = self.hash(&key);
+        let index = self.hash(key);
         self.element_vecs[index].iter_mut().find(|x| x.key == *key)
     }
 
@@ -108,7 +108,7 @@ impl<K: std::hash::Hash + std::cmp::PartialEq, V> HashMap<K, V> {
         }
 
         self.rehash(std::cmp::max(self.capacity() / 2, MIN_CAPACITY));
-        return true;
+        true
     }
 
     fn maybe_increase_capacity(&mut self) -> bool {
@@ -116,7 +116,7 @@ impl<K: std::hash::Hash + std::cmp::PartialEq, V> HashMap<K, V> {
             return false;
         }
         self.rehash(self.capacity() * 2);
-        return true;
+        true
     }
 
     fn rehash(&mut self, new_capacity: usize) {
@@ -136,8 +136,8 @@ impl<K: std::hash::Hash + std::cmp::PartialEq, V> HashMap<K, V> {
     }
 
     fn init_vecs(capacity: &usize) -> ElementsVecs<K, V> {
-        let mut element_vecs: Vec<Vec<KeyVal<K, V>>> = Vec::new();
-        for _ in (0 as usize)..*capacity {
+        let mut element_vecs: ElementsVecs<K,V> = Vec::new();
+        for _ in 0..*capacity {
             element_vecs.push(Vec::new());
         }
         element_vecs
