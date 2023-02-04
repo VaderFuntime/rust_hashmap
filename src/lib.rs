@@ -203,7 +203,7 @@ mod tests {
         }
         assert_eq!(map.size(), 20);
         assert_eq!(map.capacity(), 32);
-        assert_eq!(map.load_factor(), 20 as f32 / 32.0)
+        assert_eq!(map.load_factor(), 20_f32 / 32.0)
     }
 
     #[test]
@@ -215,7 +215,7 @@ mod tests {
         map.remove(5);
         assert_eq!(map.size(), 0);
         assert!(map.at(5).is_none());
-        assert_eq!(map.remove(5), false);
+        assert!(!map.remove(5));
         assert_eq!(map.size(), 0);
     }
 
@@ -311,7 +311,7 @@ mod tests {
             real_count += vec.len();
         }
 
-        return real_count;
+        real_count
     }
 
     #[test]
