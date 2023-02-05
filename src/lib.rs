@@ -65,7 +65,7 @@ impl<K: std::hash::Hash + std::cmp::PartialEq, V> HashMap<K, V> {
         self.element_vecs.len()
     }
 
-    pub fn contains_key(&self, key : &K) -> bool {
+    pub fn contains_key(&self, key: &K) -> bool {
         self.find(key).is_some()
     }
 
@@ -73,7 +73,7 @@ impl<K: std::hash::Hash + std::cmp::PartialEq, V> HashMap<K, V> {
         self.n_elements
     }
 
-    pub fn get(&self, key: K) -> Option<&V> {
+    pub fn get(&self, key: &K) -> Option<&V> {
         if let Some(kv) = self.find(&key) {
             Some(&kv.val)
         } else {
@@ -94,6 +94,13 @@ impl<K: std::hash::Hash + std::cmp::PartialEq, V> HashMap<K, V> {
         self.n_elements += 1;
 
         self.maybe_increase_capacity();
+    }
+
+    pub fn insert_or(&mut self, key: K, value: V) {
+        if self.contains_key(&key) {
+            return;
+        }
+        self.insert(key, value);
     }
 
     pub fn remove(&mut self, key: K) -> bool {
@@ -166,24 +173,24 @@ mod tests {
     }
 
     #[test]
-    fn add_basic() {
+    fn insert_basic() {
         let mut map = HashMap::new();
         assert_eq!(map.size(), 0);
         map.insert(5, 6);
         assert_eq!(map.size(), 1);
-        assert_eq!(*map.get(5).unwrap(), 6);
-        assert!(map.get(4).is_none())
+        assert_eq!(*map.get(&5).unwrap(), 6);
+        assert!(map.get(&4).is_none())
     }
 
     #[test]
-    fn add_more() {
+    fn insert_more() {
         let mut map = HashMap::new();
         for i in 0..20 {
             map.insert(i, i * 3);
         }
         assert_eq!(map.size(), 20);
         for i in 0..20 {
-            assert_eq!(*map.get(i).unwrap(), i * 3);
+            assert_eq!(*map.get(&i).unwrap(), i * 3);
         }
         assert_eq!(map.size(), 20);
         for i in 0..20 {
@@ -195,6 +202,43 @@ mod tests {
             map.insert(i, i * 7);
         }
         assert_eq!(map.size(), 25);
+    }
+
+    #[test]
+    fn test_contains_key() {
+        let mut map = HashMap::new();
+        assert!(!map.contains_key(&5));
+
+        map.insert(5, 6);
+        assert!(map.contains_key(&5));
+    }
+
+    #[test]
+    fn test_insert_or() {
+        let mut map = HashMap::new();
+        map.insert(5, 6);
+        assert_eq!(map.get(&5), Some(&6));
+        map.insert(5, 7);
+        assert_eq!(map.get(&5), Some(&7));
+
+        map.insert_or(5, 8);
+        assert_eq!(map.get(&5), Some(&7));
+    }
+
+    #[test]
+    fn test_string_key() {
+        let mut map = HashMap::new();
+        map.insert("key".to_string(), 4);
+        assert!(map.contains_key(&String::from("key")));
+        assert_eq!(map.get(&String::from("key")), Some(&4));
+    }
+    
+    #[test]
+    fn test_string_key_val() {
+        let mut map = HashMap::new();
+        map.insert("key".to_string(),  "val".to_string());
+        assert!(map.contains_key(&String::from("key")));
+        assert_eq!(map.get(&String::from("key")), Some(&"val".to_string()));
     }
 
     #[test]
@@ -221,7 +265,7 @@ mod tests {
         assert_eq!(map.capacity(), INITIAL_CAP);
         map.remove(5);
         assert_eq!(map.size(), 0);
-        assert!(map.get(5).is_none());
+        assert!(map.get(&5).is_none());
         assert!(!map.remove(5));
         assert_eq!(map.size(), 0);
     }
@@ -327,7 +371,7 @@ mod tests {
 
         assert_eq!(map.size(), 0);
         assert_eq!(map.capacity(), INITIAL_CAP);
-        assert!(map.get(5).is_none());
+        assert!(map.get(&5).is_none());
 
         map.insert(1, 2);
     }
