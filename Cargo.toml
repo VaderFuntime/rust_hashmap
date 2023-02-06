@@ -7,8 +7,6 @@ authors = ["VaderFuntime"]
 
 [lib]
 name = "hashmap"
-path = "src/lib/hashmap.rs"
 
 
 [dependencies]
-cool_asserts = "2.0.3"

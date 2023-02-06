@@ -50,7 +50,6 @@ where
     }
 }
 
-// basic functions
 impl<K: std::hash::Hash + std::cmp::PartialEq, V> HashMap<K, V> {
     /// Returns a vector of KeyValue vector of size capacity
     fn init_vecs(capacity: &usize) -> ElementsVecs<K, V> {
