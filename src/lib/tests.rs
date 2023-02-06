@@ -61,7 +61,7 @@ mod tests {
         map.insert(5, 7);
         assert_eq!(map.get(&5), Some(&7));
 
-        map.insert_or(5, 8);
+        map.weak_insert(5, 8);
         assert_eq!(map.get(&5), Some(&7));
     }
 

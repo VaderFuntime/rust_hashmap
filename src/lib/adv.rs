@@ -2,8 +2,10 @@
 
 use super::*;
 
-impl<K: std::hash::Hash + std::cmp::PartialEq, V> HashMap<K, V> {
-
+impl<K, V> HashMap<K, V>
+where
+    K: std::hash::Hash + std::cmp::PartialEq,
+{
     /// Inserts the key value pair to the hashmap
     /// If a pair with this key already exists, overrides the old value
     pub fn insert(&mut self, key: K, value: V) {
@@ -18,17 +20,17 @@ impl<K: std::hash::Hash + std::cmp::PartialEq, V> HashMap<K, V> {
         self.maybe_increase_capacity();
     }
 
-    // TODO change implementation
-    
-    // pub fn insert_or(&mut self, key: K, value: V) {
-    //     if self.contains_key(&key) {
-    //         return;
-    //     }
-    //     self.insert(key, value);
-    // }
+    /// Inserts the key value pair, but doesn't override the old value
+    /// if a pair already exists    
+    pub fn weak_insert(&mut self, key: K, value: V) {
+        if self.contains_key(&key) {
+            return;
+        }
+        self.insert(key, value);
+    }
 
     /// Removes the pair associated with 'key'
-    /// Returns true if was removed, and false if a pair with this key does not exist 
+    /// Returns true if was removed, and false if a pair with this key does not exist
     pub fn remove(&mut self, key: K) -> bool {
         let vec_ind = self.hash(&key);
         let vec = &mut self.element_vecs[vec_ind];
@@ -80,8 +82,4 @@ impl<K: std::hash::Hash + std::cmp::PartialEq, V> HashMap<K, V> {
             }
         }
     }
-
-
 }
-
-

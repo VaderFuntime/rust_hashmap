@@ -11,12 +11,18 @@ const MAX_LOAD_THRESHOLD: f32 = 0.75;
 const MIN_LOAD_THRESHOLD: f32 = 0.25;
 const MIN_CAPACITY: usize = 4;
 
-struct KeyVal<K: std::hash::Hash + std::cmp::PartialEq, V> {
+struct KeyVal<K, V>
+where
+    K: std::hash::Hash + std::cmp::PartialEq,
+{
     key: K,
     val: V,
 }
 
-impl<K: std::hash::Hash + std::cmp::PartialEq, V> KeyVal<K, V> {
+impl<K, V> KeyVal<K, V>
+where
+    K: std::hash::Hash + std::cmp::PartialEq,
+{
     fn to_tuple(&self) -> (&K, &V) {
         return (&self.key, &self.val);
     }
@@ -24,12 +30,18 @@ impl<K: std::hash::Hash + std::cmp::PartialEq, V> KeyVal<K, V> {
 
 type ElementsVecs<K, V> = Vec<Vec<KeyVal<K, V>>>;
 // A basic hashmap from int to int
-pub struct HashMap<K: std::hash::Hash + std::cmp::PartialEq, V> {
+pub struct HashMap<K, V>
+where
+    K: std::hash::Hash + std::cmp::PartialEq,
+{
     n_elements: usize,
     element_vecs: ElementsVecs<K, V>,
 }
 
-impl<K: std::hash::Hash + std::cmp::PartialEq, V> Default for HashMap<K, V> {
+impl<K, V> Default for HashMap<K, V>
+where
+    K: std::hash::Hash + std::cmp::PartialEq,
+{
     fn default() -> Self {
         HashMap {
             n_elements: 0,
