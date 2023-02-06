@@ -5,7 +5,10 @@ edition = "2021"
 authors = ["VaderFuntime"]
 
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "hashmap"
+path = "src/lib/hashmap.rs"
+
 
 [dependencies]
 cool_asserts = "2.0.3"
